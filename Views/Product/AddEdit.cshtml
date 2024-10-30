@@ -1,0 +1,75 @@
+﻿@model Product
+@{
+    ViewBag.Title = $"{ViewBag.Operation} Menu Item";
+    List<Category> categories = ViewBag.categorys != null ? ViewBag.categorys : [];
+    List<Ingredient> ingredients = ViewBag.ingredients != null ? ViewBag.ingredients : []; 
+}
+<h1>
+    @ViewBag.Operation Menu Item
+</h1>
+
+
+<form asp-action="AddEdit" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="ProductId" />
+    <input type="hidden" asp-for="Category" />
+    <input type="hidden" asp-for="ImageUrl" />
+    <input type="hidden" asp-for="Category" />
+    <input type="hidden" asp-for="OrderItems" />
+    <input type="hidden" asp-for="ProductIngredients" />
+
+    <!--<input type="hidden" asp-for="CategoryId" /> -->
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" name="Name" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <input asp-for="Description" class="form-control" name="Description" />
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Price"></label>
+        <input asp-for="Price" class="form-control" name="Price" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Stock">Quantity in stock</label>
+        <input asp-for="Stock" class="form-control" name="Stock" />
+        <span asp-validation-for="Stock" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ImageFile"></label>
+        <input type="file" class="form-control" name="ImageFile" asp-for="ImageFile" id="imageUpload" />
+        <span asp-validation-for="ImageFile" class="text-danger"></span>
+    </div>
+    <div class="row">
+        <div class="form-group col">
+            <label>Category</label>
+            @Html.DropDownListFor(m => m.CategoryId, new SelectList(categories, "CategoryId", "Name", Model.CategoryId), "Select Category", new { @class = "form-control" })
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
+        <div class="form-group col">
+            <label>Ingredients</label>
+            @foreach (Ingredient ingredient in ingredients)
+            {
+                <div class="form-check">
+                    @{
+                        bool isChecked = Model.ProductIngredients != null && (Model.ProductIngredients.Any(i => i.IngredientId == ingredient.IngredientId));
+                        int tmp1 = ingredient.IngredientId;
+                        bool tmp2 = Model.ProductIngredients.Any(i => i.IngredientId == ingredient.IngredientId);
+                    }
+                    <input type="checkbox" class="form-check-input" id="@ingredient.IngredientId" name="ingredientIds[]" value="@ingredient.IngredientId" @(isChecked ? "checked" : "") />
+                    <label class="form-check-label" asp-for="@ingredient.IngredientId">@ingredient.Name</label>
+
+                </div>
+            }
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">
+        Save
+    </button>
+    <button type="submit" class="btn btn-outline-primary">
+        Cancel
+    </button>
+</form>

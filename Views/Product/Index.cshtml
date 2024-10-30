@@ -1,0 +1,67 @@
+﻿@{
+    ViewData["Title"] = "Tequila Menu Items";
+}
+
+@functions {
+    string getModelId(Product product)
+    {
+        return "#deleteModal" + product.ProductId;
+    }
+    string getDeleteModelId(Product product)
+    {
+        return "deleteModal" + product.ProductId;
+    }
+}
+
+<h1>Tequila Menu Items</h1>
+<br />
+<a class="btn btn-primary" value="Create New" asp-controller="Product" asp-action="AddEdit">Create New</a>
+<br />
+
+<div class="row">
+    @foreach (Product product in Model)
+    {
+        <div class="col-md-4">
+            <form asp-action="Details" asp-asp-controller="Product" method="post">
+                <input type="hidden" name="id" value="@product.ProductId" />
+                <div class="card" style="width: 18rem;">
+                    <img src="@Url.Content("~/images/" + @product.ImageUrl)" class="card-img-top fixed-image-size" alt="@product.Description" />
+                    <div class="card-body">
+                        <h5 class="card-title">@product.Name</h5>
+                        <p class="card-text">@product.Description</p>
+                        <p class="card-text">@product.Price.ToString("C")</p>
+                        <p class="card-text">Quantity in Stock: @product.Stock</p>
+                        <a class="btn btn-info" value="Edit" asp-controller="Product" asp-action="AddEdit" asp-route-id="@product.ProductId"> <i class="bi bi-pencil-fill">Edit</i></a>
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target=@getModelId(product)>
+                            Delete                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id=@getDeleteModelId(product) tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Delete @product.Name</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-danger" asp-action="delete" asp-controller="Product" >Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+
+        </div>
+    }
+
+</div>

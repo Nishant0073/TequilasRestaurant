@@ -1,0 +1,50 @@
+﻿@model TequilasRestaurant.Models.Ingredient
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Product Details</h1>
+
+@if (Model.ProductIngredients != null && Model.ProductIngredients.Any())
+{
+    <div>
+        <h4> @Model.Name </h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                Product Name
+            </dt>
+            <dt class="col-sm-2">
+                Description
+            </dt>
+            <dt class="col-sm-2">
+                Price
+            </dt>
+        </dl>
+    </div>
+    @foreach (var Product in Model.ProductIngredients)
+    {
+        <div>
+            <dl class="row">
+                <dd class="col-sm-2">
+                    @Product.Product.Name
+                </dd>
+                <dd class="col-sm-2">
+                    @Product.Product.Description
+                </dd>
+                <dd class="col-sm-2">
+                    @Product.Product.Price
+                </dd>
+            </dl>
+        </div>
+    }
+}
+else
+{
+    <p>  No Product linked with the @Model.Name Ingredient!</p>
+}
+
+<div>
+        <a asp-action="Index">Back to List</a>
+</div>
